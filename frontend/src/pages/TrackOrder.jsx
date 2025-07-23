@@ -1,92 +1,129 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import LogoutPopup from "../pages/LogoutPopup"; // Make sure path is correct
+import restaurantData from "../data/restaurantData"; 
 import "./TrackOrder.css";
 
 const statusStages = ["Order Placed", "Preparing", "Out for Delivery", "Delivered"];
 
-const TrackOrder = () => {
+// TrackOrder now receives isAuthenticated and onLogout as props from App.jsx
+const TrackOrder = ({ isAuthenticated, onLogout }) => { 
   const location = useLocation();
-  // Ensure orderId and restaurantId are correctly passed from OrderSuccess.jsx
-  // OrderSuccess.jsx should receive orderId and restaurantId from Order.jsx's navigate state.
-  const { orderId, restaurantId } = location.state || {}; // Expecting restaurantId now, not full restaurant object
+  const navigate = useNavigate();
+  const { orderId, restaurantId } = location.state || {}; 
 
   const [order, setOrder] = useState(null);
   const [currentStage, setCurrentStage] = useState(0);
-  const [restaurantName, setRestaurantName] = useState("Unknown Restaurant"); // State to hold restaurant name
+  const [restaurantName, setRestaurantName] = useState("Unknown Restaurant"); 
+  const [loading, setLoading] = useState(true); 
+  const [error, setError] = useState(null); 
 
-  // Retrieve API_BASE_URL from environment variables
-  // This should be 'https://bitescape.onrender.com' when deployed.
-  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'; // Fallback for local testing
+  // State for Logout Popup (managed locally within this component)
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+
+  // Handlers for Logout Popup
+  const handleLogout = () => setShowLogoutPopup(true); // This local handler just shows the popup
+  const handleConfirmLogout = () => {
+    setShowLogoutPopup(false);
+    onLogout(); // This calls the onLogout prop received from App.jsx
+    navigate("/"); // Redirect to homepage after logout
+  };
+  const handleCancelLogout = () => setShowLogoutPopup(false);
+
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'; 
 
   useEffect(() => {
-    if (orderId) {
-      // IMPORTANT: Use API_BASE_URL for the fetch call
-      fetch(`${API_BASE_URL}/api/orders/${orderId}`)
-        .then(res => {
-          if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-          }
-          return res.json();
-        })
-        .then(data => {
-          if (data && Array.isArray(data.items)) {
-            setOrder(data);
-            // Optionally, you can set the initial stage based on data.status if your backend provides it
-            // e.g., if (data.status) { setCurrentStage(statusStages.indexOf(data.status)); }
+    const fetchOrderAndRestaurant = async () => {
+      setLoading(true);
+      setError(null);
 
-            // Fetch restaurant data if restaurantId is available and not already passed
-            // This is a common pattern if you only pass IDs between pages.
-            // If restaurant object is passed from OrderSuccess, this might be redundant.
-            if (restaurantId) {
-                // Assuming you have a way to fetch restaurant details by ID, e.g., from your static data or another API
-                // For now, let's use the local restaurantData for demonstration
-                const foundRestaurant = restaurantData.find(r => r.id === restaurantId);
-                if (foundRestaurant) {
-                    setRestaurantName(foundRestaurant.name);
-                }
+      if (!orderId) {
+        console.warn("No orderId found in location state for TrackOrder. Redirecting to homepage.");
+        setOrder(null);
+        setLoading(false);
+        setError("No order ID provided. Redirecting to homepage.");
+        setTimeout(() => navigate("/"), 2000); 
+        return;
+      }
+
+      try {
+        const orderResponse = await fetch(`${API_BASE_URL}/api/orders/${orderId}`);
+        if (!orderResponse.ok) {
+          throw new Error(`HTTP error fetching order! status: ${orderResponse.status}`);
+        }
+        const orderData = await orderResponse.json();
+
+        if (orderData && Array.isArray(orderData.items)) {
+          setOrder(orderData);
+
+          if (restaurantId) {
+            const foundRestaurant = restaurantData.find(r => r.id === restaurantId);
+            if (foundRestaurant) {
+              setRestaurantName(foundRestaurant.name);
+            } else {
+              console.warn(`Restaurant with ID "${restaurantId}" not found in local restaurantData.`);
+              setRestaurantName("Unknown Restaurant (ID not found)");
             }
-
+          } else if (orderData.restaurantId) { 
+              const foundRestaurant = restaurantData.find(r => r.id === orderData.restaurantId);
+              if (foundRestaurant) {
+                  setRestaurantName(foundRestaurant.name);
+              } else {
+                  console.warn(`Restaurant with ID "${orderData.restaurantId}" from order data not found in local restaurantData.`);
+                  setRestaurantName("Unknown Restaurant (ID from order not found)");
+              }
           } else {
-            console.warn("⚠️ Invalid order data received:", data);
-            setOrder(null);
+              console.warn("No restaurantId provided in state or order data.");
+              setRestaurantName("Unknown Restaurant (ID missing)");
           }
 
-          // Simulate order status progression
           const interval = setInterval(() => {
             setCurrentStage(prev => {
               if (prev < statusStages.length - 1) {
                 return prev + 1;
               } else {
-                clearInterval(interval); // Stop interval once delivered
+                clearInterval(interval); 
                 return prev;
               }
             });
           }, 4000);
 
-          return () => clearInterval(interval); // Cleanup on component unmount
-        })
-        .catch(err => {
-          console.error("❌ Error fetching order:", err);
-          setOrder(null); // Clear order on error
-          // Optionally display an error message to the user
-        });
-    } else {
-      console.warn("No orderId found in location state for TrackOrder.");
-      setOrder(null); // Ensure order is null if no ID
-    }
-  }, [orderId, restaurantId]); // Add restaurantId to dependency array
+          return () => clearInterval(interval);
+
+        } else {
+          console.warn("⚠️ Invalid order data received:", orderData);
+          setOrder(null);
+          setError("Invalid order data received from server.");
+        }
+      } catch (err) {
+        console.error("❌ Error fetching order or restaurant:", err);
+        setOrder(null);
+        setError(`Failed to load order: ${err.message}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrderAndRestaurant();
+
+  }, [orderId, restaurantId, API_BASE_URL, navigate]); 
 
   return (
     <div className="track-order-page">
-      <Navbar isHomepage={false} isAuthenticated={true} />
+      {/* Pass isAuthenticated and handleLogout to Navbar */}
+      <Navbar isHomepage={false} isAuthenticated={isAuthenticated} onLogout={handleLogout} />
 
       <div className="track-container">
         <h1>📍 Track Your Order</h1>
 
-        {!order ? (
-          <p>Loading order details or order not found...</p>
+        {loading ? (
+          <p>Loading order details...</p>
+        ) : error ? (
+          <p className="error-message">Error: {error}</p>
+        ) : !order ? (
+          <p>Order details could not be loaded. Please try again later.</p>
         ) : (
           <>
             <div className="order-status">
@@ -99,13 +136,13 @@ const TrackOrder = () => {
             </div>
 
             <div className="order-info">
-              <h3>Order Summary (Order ID: {orderId})</h3> {/* Display Order ID */}
+              <h3>Order Summary (Order ID: {orderId})</h3> 
 
               <ul className="order-summary-list">
                 {order.items.map((item, i) => (
                   <li key={i}>
                     🍽 <strong>{item.dish}</strong> from{" "}
-                    <strong>{restaurantName}</strong> <br /> {/* Use restaurantName state */}
+                    <strong>{restaurantName}</strong> <br /> 
                     ₹{item.price} × {item.quantity} = ₹{item.price * item.quantity}
                   </li>
                 ))}
@@ -123,6 +160,11 @@ const TrackOrder = () => {
       </div>
 
       <Footer />
+
+      {/* Logout Popup */}
+      {showLogoutPopup && (
+        <LogoutPopup onConfirm={handleConfirmLogout} onCancel={handleCancelLogout} />
+      )}
     </div>
   );
 };
