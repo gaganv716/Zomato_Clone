@@ -11,6 +11,12 @@ const Order = ({ isAuthenticated, onLogout }) => {
   const navigate = useNavigate();
   const restaurant = restaurantData.find((rest) => rest.id === id);
 
+  // Retrieve API_BASE_URL from environment variables
+  // This should be 'https://bitescape.onrender.com' when deployed
+  // and 'http://localhost:5173' (or 3000) for your frontend dev server.
+  // The backend API URL is what we need here.
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'; // Fallback for local testing
+
   const [cart, setCart] = useState([]);
   const [popupStep, setPopupStep] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("");
@@ -39,14 +45,22 @@ const Order = ({ isAuthenticated, onLogout }) => {
 
     setCart(updatedCart);
 
-    const googleMapsEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(restaurant.address)}&output=embed`;
+    // No need for googleMapsEmbedUrl here, it's used in the JSX below.
+    // const googleMapsEmbedUrl = `https://www.google.com/maps?q=${encodeURIComponent(restaurant.address)}&output=embed`;
 
     try {
-      await fetch("http://localhost:5000/api/cart", {
+      const userId = localStorage.getItem("userId") || "test-user-123"; // Get user ID
+      const token = localStorage.getItem("token"); // Get token for authorization
+
+      // IMPORTANT: Use API_BASE_URL for the cart API call
+      const response = await fetch(`${API_BASE_URL}/api/cart`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // Include Authorization header for protected routes
+        },
         body: JSON.stringify({
-          userId: "test-user-123",
+          userId: userId,
           item: {
             foodId: item.dish,
             restaurantId: restaurant.id,
@@ -54,8 +68,16 @@ const Order = ({ isAuthenticated, onLogout }) => {
           }
         })
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("❌ Error adding to cart (backend):", response.status, errorData);
+        // Optionally show a user-friendly message
+      }
+
     } catch (error) {
-      console.error("❌ Error saving to DB:", error);
+      console.error("❌ Error saving to DB (frontend fetch error):", error);
+      // Optionally show a user-friendly message
     }
   };
 
@@ -68,12 +90,18 @@ const Order = ({ isAuthenticated, onLogout }) => {
     } else {
       setCart(cart.map((c) => c.dish === item.dish ? { ...c, quantity: updatedQty } : c));
     }
+    // TODO: Consider adding a backend call here to update cart quantity in DB
   };
 
   const getTotal = () => cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleOrderNow = () => {
-    if (cart.length === 0) return alert("Please add at least one item to cart!");
+    if (cart.length === 0) {
+      // Replaced alert with a more user-friendly message or modal if preferred
+      // For now, keeping alert as per original code, but consider a custom modal.
+      alert("Please add at least one item to cart!");
+      return;
+    }
     setPopupStep(1);
   };
 
@@ -83,7 +111,8 @@ const Order = ({ isAuthenticated, onLogout }) => {
 
   const proceedToPaymentModes = () => {
     if (!address.name || !address.phone || !address.line1 || !address.city || !address.pincode) {
-      return alert("Please fill in all required fields.");
+      alert("Please fill in all required fields."); // Consider custom modal
+      return;
     }
     setPopupStep(2);
   };
@@ -94,40 +123,64 @@ const Order = ({ isAuthenticated, onLogout }) => {
   };
 
   const simulatePayment = async () => {
-    setPopupStep(4); // Show "Payment Successful"
-  
+    setPopupStep(4); // Show "Payment Successful" message immediately
+    
     try {
-      const response = await fetch("http://localhost:5000/api/orders", {
+      const userId = localStorage.getItem("userId") || "test-user-123"; // Get user ID
+      const token = localStorage.getItem("token"); // Get token for authorization
+
+      // IMPORTANT: Use API_BASE_URL for the orders API call
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // Include Authorization header
+        },
         body: JSON.stringify({
-          userId: "test-user-123",
+          userId: userId,
           restaurantId: restaurant.id,
-          items: cart,
+          items: cart.map(item => ({ // Ensure items match backend OrderSchema
+            dish: item.dish,
+            quantity: item.quantity,
+            price: item.price
+          })),
           address,
           paymentMethod
         })
       });
-  
+      
+      if (!response.ok) { // Check for HTTP errors (e.g., 400, 500)
+        const errorData = await response.json();
+        console.error("❌ Order submission failed with status:", response.status, errorData);
+        alert(`Order failed: ${errorData.message || 'Server error'}`); // Show error to user
+        setPopupStep(0); // Close popup or show an error state
+        return; // Stop execution
+      }
+
       const data = await response.json();
-  
+
       if (data && data._id) {
         // ✅ Store items for OrderSuccess page
         localStorage.setItem("orderedItems", JSON.stringify(cart));
-  
-        console.log("🚀 Navigating to OrderSuccess.jsx with:", data._id);
+        localStorage.setItem("lastOrderId", data._id); // Store order ID if needed elsewhere
+
+        console.log("🚀 Order submitted successfully. Navigating to OrderSuccess.jsx with:", data._id);
         
+        // Redirect after a short delay to allow "Payment Successful" message to be seen
         setTimeout(() => {
           navigate("/order-success", { state: { orderId: data._id, restaurantId: restaurant.id } });
-        }, 3000);
+          setCart([]); // Clear cart after successful order and navigation
+        }, 1500); // Reduced timeout to 1.5 seconds for quicker redirection
       } else {
-        console.error("❌ Order submission failed:", data);
+        console.error("❌ Order submission failed: No _id in response", data);
+        alert("Order failed: Invalid response from server.");
+        setPopupStep(0); // Close popup or show an error state
       }
     } catch (err) {
-      console.error("❌ Payment simulation error:", err);
+      console.error("❌ Payment simulation error (network/unexpected):", err);
+      alert("An error occurred during payment. Please check your internet connection and try again.");
+      setPopupStep(0); // Close popup or show an error state
     }
-  
-    setCart([]);
   };
   
 
@@ -216,7 +269,7 @@ const Order = ({ isAuthenticated, onLogout }) => {
               );
             })}
           </ul>
-  
+          
           {cart.length > 0 && (
             <div className="cart-summary">
               <h3>🛒 Cart Summary</h3>
@@ -261,8 +314,8 @@ const Order = ({ isAuthenticated, onLogout }) => {
             {popupStep === 3 && (
               <>
                 <h3>Enter {paymentMethod === "card" ? "Card Details" :
-                      paymentMethod === "netbanking" ? "Select Bank" :
-                      "UPI Details"}</h3>
+                          paymentMethod === "netbanking" ? "Select Bank" :
+                          "UPI Details"}</h3>
 
                 {paymentMethod === "card" && (
                   <>
