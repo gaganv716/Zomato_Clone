@@ -2,7 +2,24 @@
     import { Strategy as GoogleStrategy } from "passport-google-oauth20";
     import dotenv from "dotenv";
     import User from "../models/userModel.js";
-    dotenv.config();
+
+    // IMPORTANT: Only call dotenv.config() if not in a production environment like Render.
+    // Render automatically injects environment variables into process.env.
+    // Running dotenv.config() in production might cause issues if a .env file isn't present.
+    if (process.env.NODE_ENV !== 'production') {
+      dotenv.config();
+    }
+
+    // Define the backend base URL.
+    // It will use process.env.BACKEND_URL if available (from Render's environment variables or local .env),
+    // otherwise, it defaults to http://localhost:5000 for local development.
+    const BACKEND_BASE_URL = process.env.BACKEND_URL || 'http://localhost:5000';
+
+    // Construct the full Google OAuth callback URL using the defined base URL.
+    const googleCallbackURL = `${BACKEND_BASE_URL}/api/auth/google/callback`;
+
+    // Log the constructed URL for debugging. This message will appear in Render's logs.
+    console.log(`Google OAuth Callback URL being used: ${googleCallbackURL}`);
 
     // Use Google OAuth Strategy
     passport.use(
@@ -10,9 +27,7 @@
         {
           clientID: process.env.GOOGLE_CLIENT_ID,
           clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-          // IMPORTANT CHANGE: Use the absolute URL from environment variable for callbackURL
-          // This ensures HTTPS is used when deployed on Render.
-          callbackURL: `${process.env.BACKEND_URL}/api/auth/google/callback`,
+          callbackURL: googleCallbackURL, // Use the dynamically constructed URL
         },
         async (accessToken, refreshToken, profile, done) => {
           try {
