@@ -9,14 +9,18 @@ const LoginModal = ({ show, handleClose, handleSignUp }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const API_BASE_URL = import.meta.env.VITE_API_URL; // ✅ Uses environment variable
+  // This will now correctly be 'https://bitescape.onrender.com'
+  const API_BASE_URL = import.meta.env.VITE_API_URL; 
 
   const isValidEmail = email.trim().length > 0 && email.includes("@");
   const isValidPassword = password.length >= 6;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isValidEmail || !isValidPassword) return;
+    if (!isValidEmail || !isValidPassword) {
+      setErrorMessage("Please enter a valid email and a password of at least 6 characters.");
+      return;
+    }
 
     setIsSubmitting(true);
     setErrorMessage("");
@@ -30,28 +34,31 @@ const LoginModal = ({ show, handleClose, handleSignUp }) => {
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data.message || "Login failed");
+      if (!response.ok) {
+        throw new Error(data.message || "Login failed");
+      }
 
-localStorage.setItem("token", data.token);
-console.log("Logged in successfully:", email);
-handleClose();
+      localStorage.setItem("token", data.token);
+      console.log("Logged in successfully:", email);
+      handleClose();
 
-// ✅ Conditional navigation
-if (data.isProfileComplete) {
-  navigate("/homepage");
-} else {
-  navigate("/complete-profile");
-}
+      if (data.isProfileComplete) {
+        navigate("/homepage");
+      } else {
+        navigate("/complete-profile");
+      }
 
-  } catch (error) {
-    setErrorMessage(error.message || "An error occurred during login");
+    } catch (error) {
+      console.error("Login error:", error); 
+      setErrorMessage(error.message || "An error occurred during login");
     } finally {
       setIsSubmitting(false);
     }
   };
   
-    const handleGoogleLogin = () => {
-    window.location.href = `${API_BASE_URL}/api/auth/google`; // ✅ Uses environment variable
+  const handleGoogleLogin = () => {
+    // This will now correctly point to 'https://bitescape.onrender.com/api/auth/google'
+    window.location.href = `${API_BASE_URL}/api/auth/google`; 
   };
 
   if (!show) return null;
