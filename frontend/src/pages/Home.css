@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@700&display=swap');
+
+body, html {
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.hero-section {
+  height: 50vh; /* Limits the height to half the page */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-image: url('https://b.zmtcdn.com/web_assets/81f3ff974d82520780078ba1cfbd453a1583259680.png'); /* Replace with your actual image */
+  background-size: cover;
+  background-position: center;
+  color: white;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  margin: 10px 0 0;
+}
+
+.bitescape-title {
+  font-family: 'Baloo Bhai 2', sans-serif;
+  font-size: 4rem;
+  font-weight: 700;
+  text-align: center;
+  color: white;
+}
+
+/* Move Hero.css styles here */
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.location-input, .search-input {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  width: 200px;
+}
+
+.search-btn {
+  background-color: red;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+

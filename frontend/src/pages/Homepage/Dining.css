@@ -1,0 +1,90 @@
+/* Dining Page Styles */
+.dining-page {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fffdfd;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Categories Section */
+  .categories-container {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0 20px 0;
+    padding: 10px 0;
+    background-color: #fff;
+  }
+  
+  .categories-wrapper {
+    display: flex;
+    position: relative;
+  }
+  
+  .category-item {
+    cursor: pointer;
+    margin: 0 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .category-item:hover {
+    color: #ff0055; /* Pink on hover */
+  }
+  
+  .category-item.active {
+    color: #ff0055; /* Pink for active category */
+  }
+  
+  .category-icon {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .underline {
+    position: absolute;
+    bottom: -5px;
+    height: 2px;
+    background-color: #ff0055;
+    transition: all 0.3s ease;
+  }
+  
+  /* Collection Section */
+  .collection-section {
+    padding: 40px 20px;
+    text-align: center;
+    background-color: #f4f4f4;
+  }
+  
+  /* Restaurant List Section */
+  .restaurant-list-section {
+    padding: 40px 20px;
+    background-color: #fff;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Explore Section */
+  .explore-section {
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Footer Section */
+  footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+  }
+  

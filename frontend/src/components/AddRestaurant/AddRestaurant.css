@@ -1,0 +1,24 @@
+.add-restaurant-container {
+    height: 100vh;
+    background: url("https://b.zmtcdn.com/data/o2_assets/d21d421672f053abdb9f48e7320ef6ac1724931538.jpeg") center/cover no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+  
+  .add-restaurant-content {
+    text-align: center;
+    margin-top: 100px;
+  }
+  
+  .add-restaurant-content h1 {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+  
+  .add-restaurant-content p {
+    font-size: 1.5rem;
+  }
+  

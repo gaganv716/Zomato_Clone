@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* Center hero section */
+.hero-section {
+    text-align: center;
+    padding: 50px 0;
+    min-height: 430px; /* Adjust as needed */
+}
+
+/* Search Bar - Zomato Style */
+.search-container {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 5px 20px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2); /* Floating effect */
+    width: 90%;
+    max-width: 800px; /* Bigger width */
+    margin: 20px auto; /* Centering */
+}
+
+/* Location Section */
+.location-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    font-size: 18px; /* Bigger font */
+    font-weight: 500;
+    color: #4F4F4F;
+    cursor: pointer;
+    border-right: 2px solid #ddd; /* Divider */
+}
+
+/* Location Icon */
+.location-icon {
+    font-size: 22px; /* Bigger icon */
+    color: red;
+}
+
+/* Dropdown Select */
+.location-dropdown select {
+    border: none;
+    outline: none;
+    font-size: 18px;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* Search Box */
+.search-box {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    padding-left: 15px;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    font-size: 18px; /* Bigger font */
+    flex: 1;
+    padding: 15px;
+    width: 100%;
+}
+
+/* Search Icon */
+.search-icon {
+    font-size: 22px;
+    color: #777;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.tagline {
+    font-family: 'Poppins', sans-serif;
+    margin-top: 20px;  /* Adds space below the title */
+    font-size: 2.2rem;  /* Adjust font size */
+    font-weight: 400;  /* Make it slightly lighter */
+    letter-spacing: 0.5px; /* Improve readability */
+  }
+
+  .logo {
+    margin-top: 50px; /* Push tagline further down */
+    font-family: 'Poppins', sans-serif; /* Or Montserrat for a bolder look */
+    font-size: 2.5rem;  /* Adjust size as needed */
+    font-weight: 700; /* Bold for a strong presence */
+    letter-spacing: 1px; /* Adds a modern touch */
+    text-transform: uppercase; /* Makes it look premium */
+    color: #fff; /* Or any color that contrasts with your background */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+  } 

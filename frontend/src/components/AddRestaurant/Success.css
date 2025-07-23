@@ -1,0 +1,59 @@
+.success-section {
+    padding: 60px 20px;
+    background-color: #d9e9f6; /* White background */
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .success-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #333;
+  }
+  
+  .stories-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Spacing between stories */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  }
+  
+  .story {
+    background: #f9f9f9; /* Light gray background for cards */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 30%; /* Width of each story card */
+    text-align: left;
+  }
+  
+  .story h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #0073e6; /* Highlighted color for names */
+  }
+  
+  .story-role {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #555;
+  }
+  
+  .story-text {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  @media (max-width: 768px) {
+    .stories-container {
+      flex-direction: column; /* Stack stories vertically on smaller screens */
+      gap: 30px; /* Increase spacing between stacked cards */
+    }
+  
+    .story {
+      width: 100%; /* Full width for stories on smaller screens */
+    }
+  }
+  

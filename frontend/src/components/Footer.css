@@ -1,0 +1,120 @@
+.footer {
+    background-color: #f8f8f8;
+    padding: 40px 20px;
+    font-family: "Poppins", sans-serif;
+    color: #333;
+  }
+  
+  .footer-logo {
+    text-align: left;
+    margin-left: auto;
+    margin-bottom: 20px;
+  }
+  
+  .footer-logo h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #e60051; /* Add your brand color here */
+  }
+  
+  .footer-sections {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .footer-section {
+    flex: 1 1 200px;
+    margin: 10px;
+  }
+  
+  .footer-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-section ul li {
+    margin-bottom: 10px;
+  }
+  
+  .footer-section ul li a {
+    text-decoration: none;
+    color: #666;
+    transition: color 0.3s;
+  }
+  
+  .footer-section ul li a:hover {
+    color: #333;
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .social-icons a {
+    color: #666;
+    font-size: 20px;
+    transition: color 0.3s;
+  }
+  
+  .social-icons a:hover {
+    color: #333;
+  }
+  
+  .app-download-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .app-download-buttons img {
+    width: 120px;
+    height: auto;
+  }
+  
+  .footer-disclaimer {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    margin-top: 20px;
+  }
+
+  .selectors {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  
+  .country-selector label,
+  .language-selector label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .country-selector select,
+  .language-selector select {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 250px;
+    cursor: pointer;
+  }
+  
+  .flag-icon {
+  width: 20px;
+  height: 15px;
+  margin-right: 5px;
+}

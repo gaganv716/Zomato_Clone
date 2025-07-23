@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+.add-restaurant-container {
+    height: 60vh; /* Half of the viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: url('https://b.zmtcdn.com/data/o2_assets/d21d421672f053abdb9f48e7320ef6ac1724931538.jpeg') no-repeat;
+    background-size: 100vw auto; /* Reduce the width */
+    background-position: center top -5px; /* Adjust focus */
+    background-repeat: no-repeat;
+    color: white;
+    width: 100%;
+}
+
+
+/* Navbar */
+.add-restaurant-navbar {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  background: rgba(255, 255, 255, 0); /* Fully transparent */
+  font-family: 'Poppins', sans-serif;
+  color: white;
+}
+
+.brands-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: rgb(255, 255, 255);
+}
+
+.nav-right ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.nav-right {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-link {
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffffff;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: #ff5722;
+}
+
+
+/* Content Styling */
+.add-restaurant-content {
+  text-align: center;
+  max-width: 600px;
+  font-family: 'Poppins', sans-serif;
+  color: black;
+  margin-top: 20px;
+}
+
+.add-restaurant-content h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.add-restaurant-content p {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.add-restaurant-btn {
+    margin-top: 40px; /* Increase margin to move the button further down */
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    background-color: #192ee7;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .add-restaurant-btn:hover {
+    background-color: #e6b800; /* Hover effect */
+  }
+
+  

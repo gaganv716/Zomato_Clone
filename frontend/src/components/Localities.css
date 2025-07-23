@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+.localities-container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.localities-title {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-align: center; /* Aligning title to the left */
+}
+
+.localities-list {
+    display: grid;
+    gap: 15px; /* Reduced gap for tighter spacing */
+    grid-template-columns: repeat(3, minmax(300px, 1fr)); /* Increase minimum width to make items larger */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .localities-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    height: 80px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .localities-item:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .locality-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .locality-places {
+    font-size: 16px;
+    font-weight: 400;
+    color: #666;
+  }
+  
+  .see-more {
+    text-align: center;
+    font-size: 16px;
+    color: #0073e6; /* Zomato-themed blue color */
+    text-decoration: none;
+    font-weight: 500;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .see-more:hover {
+    text-decoration: underline;
+    background-color: #f9f9f9;
+  }
+  

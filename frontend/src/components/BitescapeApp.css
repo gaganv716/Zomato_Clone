@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+.app-section {
+    display: grid;
+    align-items: center;
+    justify-content: space-between;
+    width: 100vw; /* Make the section cover the full viewport width */
+    margin: 0; /* Remove default margin */
+    padding: 100px 20px;
+    font-family: "Poppins", sans-serif;
+    background-color: rgb(255, 251, 247); /* Retain original background color */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    grid-template-columns: 1fr 1fr; /* Text and image */
+    gap: 100px; /* Add gap between text and image */
+}
+
+.app-display {
+  flex: 1;
+  text-align: center;
+}
+
+.app-image {
+    display: grid;
+  width: 100%;
+  max-width: 400px; /* Restrict maximum width of the image */
+  margin-left: auto;
+}
+
+.app-promo {
+  flex: 1;
+  max-width: 500px;
+  margin-left: 0;
+  margin-right: 200px;
+  align-self: flex-start; /* Ensures it doesn't shift vertically */
+  position: relative;
+  left: -40px; /* Moves text towards the left by 40px */
+}
+
+.promo-title {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.promo-subtitle {
+  font-size: 18px;
+  color: #666; /* Retaining color */
+  margin-bottom: 20px;
+}
+
+.download-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.download-btn {
+  width: 150px;
+  cursor: pointer;
+}
+
+.promo-form {
+  display: flex;
+  flex-direction: column; /* Aligns items vertically */
+  gap: 10px; /* Adds spacing between elements */
+  margin-bottom: 20px;
+}
+
+.promo-radio {
+  display: flex;
+  gap: 50px; /* Spacing between radio buttons */
+  font-size: 16px;
+  color: #333333; /* Original color */
+}
+
+.promo-radio label {
+  cursor: pointer;
+}
+
+.promo-radio input {
+  margin-right: 5px;
+}
+
+.input-button-group {
+  display: flex; /* Align input box and button horizontally */
+  gap: 10px; /* Spacing between input box and button */
+}
+
+.promo-input {
+  flex: 1; /* Input box takes up remaining space */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.promo-button {
+  padding: 10px;
+  background-color: #e60051; /* Retaining the button color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 130px; /* Reduced width for compact alignment */
+  height: 50px;
+}
+
+.promo-button:hover {
+  background-color: #be0542; /* Retaining hover color */
+}
+

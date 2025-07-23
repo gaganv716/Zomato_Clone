@@ -1,0 +1,101 @@
+/* Container Styling */
+.banner-container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9); /* Light background with transparency */
+    padding: 15px 20px; /* Reduce spacing */
+    border-radius: 30px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-top: -50px; /* Overlap Navbar */
+    z-index: 10; /* Bring banner above Navbar */
+    height: 300px; /* Fixed height */
+    width: 65%; /* Fixed width */
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+  }
+  
+  /* Left-Aligned Text Section */
+  .banner-text {
+    max-width: 48%;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .document-lists {
+    display: flex;
+    justify-content: space-between; /* Space between left and right lists */
+  }
+  
+  .document-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    flex: 1; /* Ensure equal space for both lists */
+  }
+  
+  .document-list.right-aligned {
+    text-align: right; /* Align text to the right */
+  }
+  
+  .document-list li {
+    font-size: 1rem;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .document-list.right-aligned li {
+    justify-content: flex-end; /* Align green tick icons to match text */
+  }
+  
+  .green-tick-icon {
+    color: #28a745; /* Green color for tick icons */
+    margin-right: 5px; /* Space between icon and text */
+  }
+  
+  /* Video Section */
+/* Video Section */
+.banner-video {
+    max-width: 50%; /* Restrict maximum width of the video container */
+    text-align: center;
+    margin-left: -20px; /* Shift the iframe leftwards */
+  }
+  
+  .banner-video iframe {
+    width: 100%;
+    height: 100%;
+    max-width: 480px; /* Restrict iframe width */
+    border-radius: 8px; /* Smooth corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }  
+  
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .banner-container {
+      flex-direction: column;
+      text-align: center;
+      padding: 15px;
+    }
+  
+    .banner-text {
+      max-width: 100%;
+    }
+  
+    .document-lists {
+      flex-direction: column; /* Stack lists vertically on smaller screens */
+      text-align: center;
+    }
+  
+    .document-list.right-aligned {
+      text-align: left; /* Align both lists to the left */
+      justify-content: flex-start; /* Reset alignment for smaller screens */
+    }
+  
+    .banner-video {
+      margin-top: 15px;
+    }
+  }
+  

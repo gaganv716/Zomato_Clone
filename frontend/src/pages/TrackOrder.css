@@ -1,0 +1,95 @@
+.track-order-page {
+    padding-top: 100px;
+    font-family: "Poppins", sans-serif;
+    background: #fffafc;
+    min-height: 100vh;
+  }
+  
+  .track-container {
+    max-width: 700px;
+    margin: auto;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .order-status {
+    display: flex;
+    justify-content: space-between;
+    margin: 40px 0;
+    position: relative;
+  }
+  
+  .status-step {
+    text-align: center;
+    flex: 1;
+    position: relative;
+  }
+  
+  .status-step .step-circle {
+    width: 40px;
+    height: 40px;
+    background-color: #ddd;
+    border-radius: 50%;
+    line-height: 40px;
+    color: #fff;
+    font-weight: bold;
+    margin: auto;
+  }
+  
+  .status-step.active .step-circle {
+    background-color: #28a745;
+  }
+  
+  .status-step p {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .status-step.active p {
+    color: #28a745;
+  }
+  
+  .status-step::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    height: 4px;
+    width: 100%;
+    background-color: #ccc;
+    z-index: -1;
+  }
+  
+  .status-step:last-child::after {
+    content: none;
+  }
+  
+  .status-step.active::after {
+    background-color: #28a745;
+  }
+  
+  .order-info {
+    text-align: left;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+  
+  .order-info h3 {
+    color: #e23744;
+    margin-bottom: 12px;
+  }
+  
+  .order-info ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 10px;
+  }
+  
+  .order-info li {
+    margin-bottom: 6px;
+    font-size: 15px;
+  }
+  

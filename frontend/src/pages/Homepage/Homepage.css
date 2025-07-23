@@ -1,0 +1,183 @@
+/* General Styling */
+.homepage {
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+/* Categories Container */
+.categories-container {
+  display: flex;
+  justify-content: center;
+  margin: 40px auto;
+  overflow-x: auto;
+  background-color: #fff;
+}
+
+.categories-wrapper {
+  display: flex;
+  position: relative; /* Allows .underline to position within this wrapper */
+  width: max-content;
+  justify-content: flex-start;
+  gap: 20px;
+  padding: 10px 0;
+}
+
+.category-item {
+  text-align: center;
+  cursor: pointer;
+  padding: 10px 15px;
+  position: relative; /* Relative positioning ensures smooth alignment */
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.category-item.active {
+  color: #ff0055; /* Highlight active category */
+  transform: scale(1.1); /* Emphasize the active category visually */
+}
+
+.underline {
+  position: absolute;
+  bottom: -2px; /* Place just below category items */
+  left: 0; /* Set initial position */
+  height: 2px;
+  background-color: #ff0055; /* Matches active category highlight */
+  transition: transform 0.3s ease, width 0.3s ease; /* Smooth movement and resizing */
+}
+
+
+/* Inspiration Section */
+.inspiration-section, .brands-section {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.food-items-grid, .brands-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  justify-items: center;
+  padding: 20px 80px;
+}
+
+.food-item, .brand-item {
+  text-align: center;
+}
+
+.food-image, .brand-image {
+  width: 120px; /* Fixed width for uniform circular containers */
+  height: 120px; /* Same value as width */
+  border-radius: 50%; /* Perfect circular shape */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: transform 0.3s ease; /* Hover effect */
+  display: flex; /* Ensure content alignment */
+  justify-content: center; /* Horizontal centering */
+  align-items: center; /* Vertical centering */
+  object-fit: cover; /* Ensures the image covers the circle */
+}
+
+.food-image:hover, .brand-image:hover {
+  transform: scale(1.1); /* Slight zoom on hover */
+}
+
+.food-name {
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.brand-name {
+  margin-top: 10px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #201f1f !important; /* Force black text */
+}
+
+.brand-time {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #383737;
+}
+
+/* Restaurants Section */
+.restaurants-section {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.restaurants-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Ensure exactly 3 cards per row */
+  gap: 20px; /* Spacing between cards */
+  justify-items: center; /* Center items within the grid */
+  padding: 20px 80px;
+}
+
+.restaurant-card {
+  text-align: center;
+  background-color: #fff; /* Add white background for cards */
+  border-radius: 12px; /* Rounded corners for a polished look */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  overflow: hidden; /* Prevent content overflow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add hover effects */
+  width: 100%; /* Ensure the card fills the grid space */
+  max-width: 300px; /* Optional: Limit maximum width */
+  height: 250px; /* Fixed height for all cards */
+}
+
+.restaurant-card:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+}
+
+.restaurant-image {
+  width: 100%; /* Full width */
+  height: 150px; /* Fixed height for consistency */
+  border-radius: 0; /* Square/rectangular shape */
+  object-fit: cover; /* Ensure images fit containers */
+  display: block;
+}
+
+.restaurant-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.restaurant-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+  display: -webkit-box; /* Enables text truncation */
+  -webkit-line-clamp: 2; /* Limit text to two lines */
+  line-clamp: 2; /* Standard property for compatibility */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.restaurant-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.restaurant-rating {
+  color: #ffcc00; /* Highlight rating in yellow */
+}
+
+.restaurant-time {
+  color: #666; /* Subtle text color for delivery time */
+}
+

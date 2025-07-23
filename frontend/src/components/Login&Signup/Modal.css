@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+/* Modal Box */
+.modal-content {
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  padding: 30px 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Close Button */
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+/* Headings */
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 1.8rem;
+  color: #192ee7;
+  text-align: center;
+}
+
+/* Form Styling */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-form input {
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.modal-form input:focus {
+  border-color: #192ee7;
+}
+
+/* Primary Button */
+.modal-btn {
+  padding: 12px;
+  background-color: #192ee7;
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.modal-btn:hover {
+  background-color: #001cb5;
+}
+
+.disabled-btn {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+}
+
+/* Google Button */
+.google-btn {
+  font-family: "Poppins", sans-serif;
+  margin-top: 15px;
+  background-color: white;
+  color: #555555;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.google-btn:hover {
+  background-color: #f0f0f0;
+}
+
+/* Error Message */
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Link Styles */
+.signup-link,
+.login-link {
+  color:#302f2f;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.signup-link span,
+.login-link span {
+  color: #192ee7;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.signup-link span:hover,
+.login-link span:hover {
+  text-decoration: underline;
+}
