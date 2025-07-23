@@ -16,6 +16,8 @@ dist-ssr
 # Env files
 .env
 .env.*        # also ignores things like .env.production, .env.development
+backend/.env
+frontend/.env
 
 # Editor directories and files
 .vscode/*
