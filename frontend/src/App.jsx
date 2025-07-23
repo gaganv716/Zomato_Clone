@@ -6,7 +6,7 @@ import {
   useNavigate,
   useParams,
   Navigate,
-  useLocation // Ensure useLocation is imported
+  useLocation,
 } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -29,7 +29,6 @@ import TrackOrder from "./pages/TrackOrder.jsx";
 
 import ScrollToTop from "./components/ScrollToTop";
 
-// Wrapper for passing props to Order page
 const OrderWrapper = ({ isAuthenticated, onLogout }) => {
   const { id } = useParams();
   return (
@@ -37,7 +36,6 @@ const OrderWrapper = ({ isAuthenticated, onLogout }) => {
   );
 };
 
-// Component to handle Google OAuth success and update auth state
 const GoogleAuthSuccessHandler = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,22 +51,20 @@ const GoogleAuthSuccessHandler = ({ onLoginSuccess }) => {
 
     if (token) {
       console.log("Token found, attempting login success and navigation.");
-      onLoginSuccess(token); // This sets localStorage and updates isAuthenticated state in AppInner
+      onLoginSuccess(token); // Call the AppInner's login success handler
 
-      // Add a small delay before navigation to ensure state updates propagate
-      // and React has a chance to re-render the AppInner with new auth state.
-      // This often resolves subtle race conditions in deployed environments.
+      // Use a small delay for navigation to ensure state updates propagate
       const timer = setTimeout(() => {
         console.log("Navigating to:", redirectPath || '/homepage');
         navigate(redirectPath || '/homepage');
-      }, 50); // A very small delay (50ms)
+      }, 50); 
 
-      return () => clearTimeout(timer); // Cleanup the timer if component unmounts
+      return () => clearTimeout(timer); 
     } else {
       console.error("No token received after Google authentication, redirecting to login.");
       navigate('/login');
     }
-  }, [location, navigate, onLoginSuccess]); // Added onLoginSuccess to dependencies
+  }, [location, navigate, onLoginSuccess]);
 
   return <p>Authenticating with Google...</p>;
 };
@@ -77,13 +73,14 @@ const GoogleAuthSuccessHandler = ({ onLoginSuccess }) => {
 function AppInner() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("token"));
+  const [showLoginModal, setShowLoginModal] = useState(false); // State to control LoginModal visibility
+  const [showSignupModal, setShowSignupModal] = useState(false); // State to control SignupModal visibility
 
   useEffect(() => {
     const checkAuthStatus = () => {
       setIsAuthenticated(!!localStorage.getItem("token"));
     };
 
-    // Listen for changes in localStorage (e.g., from other tabs or direct manipulation)
     window.addEventListener('storage', checkAuthStatus);
     return () => {
       window.removeEventListener('storage', checkAuthStatus);
@@ -92,82 +89,117 @@ function AppInner() {
 
   const handleLoginSuccess = (token) => {
     localStorage.setItem('token', token);
-    setIsAuthenticated(true); // This updates the state
+    setIsAuthenticated(true);
     console.log("handleLoginSuccess: isAuthenticated set to true.");
+    setShowLoginModal(false); // Close login modal on success
+    setShowSignupModal(false); // Ensure signup modal is also closed
   };
 
   const handleLogout = () => {
     console.log("Logging out...");
     localStorage.removeItem("token");
-    localStorage.removeItem("userId");
+    localStorage.removeItem("userId"); // Ensure userId is cleared if stored
     localStorage.removeItem("orderedItems");
     localStorage.removeItem("lastOrderId");
     setIsAuthenticated(false);
-    navigate("/"); // Redirect to landing page after logout
+    navigate("/");
   };
 
-  return (
-    <Routes>
-      <Route
-        path="/"
-        element={<Home isAuthenticated={isAuthenticated} onLogout={handleLogout} />}
-      />
-      <Route
-        path="/homepage"
-        element={<Homepage isAuthenticated={isAuthenticated} onLogout={handleLogout} />}
-      />
-      <Route
-        path="/dining"
-        element={<Dining isAuthenticated={isAuthenticated} onLogout={handleLogout} />}
-      />
-      <Route
-        path="/nightlife"
-        element={<Nightlife isAuthenticated={isAuthenticated} onLogout={handleLogout} />}
-      />
-      <Route
-        path="/order/:id"
-        element={isAuthenticated ? <OrderWrapper isAuthenticated={isAuthenticated} onLogout={handleLogout} /> : <Navigate to="/" />}
-      />
-      <Route path="/get-app" element={<BitescapeApp />} />
-      <Route
-        path="/add-restaurant"
-        element={
-          <>
-            <AddRestaurantNav />
-            <AddRestBanner />
-            <Partner />
-            <Success />
-            <FrequentQues />
-            <Footer />
-          </>
-        }
-      />
-      {/* Login and Signup modals are typically rendered conditionally, not as full routes */}
-      {/* If these are actual pages, they should also receive isAuthenticated/onLogout if they have a Navbar */}
-      <Route path="/login" element={<LoginModal /* props */ />} /> 
-      <Route path="/signup" element={<SignupModal /* props */ />} />
+  const openLoginModal = () => {
+    setShowLoginModal(true);
+    setShowSignupModal(false); // Close signup if open
+  };
 
-      {/* GoogleAuthSuccess now uses a wrapper to pass the onLoginSuccess handler */}
-      <Route path="/google-auth-success" element={<GoogleAuthSuccessHandler onLoginSuccess={handleLoginSuccess} />} />
-      
-      {/* IMPORTANT: Pass isAuthenticated and onLogout to these routes */}
-      <Route 
-        path="/complete-profile" 
-        element={isAuthenticated ? <CompleteProfile isAuthenticated={isAuthenticated} onLogout={handleLogout} /> : <Navigate to="/" />} 
-      />
-      <Route 
-        path="/order-success" 
-        element={isAuthenticated ? <OrderSuccess isAuthenticated={isAuthenticated} onLogout={handleLogout} /> : <Navigate to="/" />} 
-      />
-      <Route 
-        path="/track-order" 
-        element={isAuthenticated ? <TrackOrder isAuthenticated={isAuthenticated} onLogout={handleLogout} /> : <Navigate to="/" />} 
-      />
-    </Routes>
+  const openSignupModal = () => {
+    setShowSignupModal(true);
+    setShowLoginModal(false); // Close login if open
+  };
+
+  const closeModals = () => {
+    setShowLoginModal(false);
+    setShowSignupModal(false);
+  };
+
+
+  return (
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={<Home isAuthenticated={isAuthenticated} onLogout={handleLogout} onLoginClick={openLoginModal} onSignupClick={openSignupModal} />}
+        />
+        <Route
+          path="/homepage"
+          element={<Homepage isAuthenticated={isAuthenticated} onLogout={handleLogout} />}
+        />
+        <Route
+          path="/dining"
+          element={<Dining isAuthenticated={isAuthenticated} onLogout={handleLogout} />}
+        />
+        <Route
+          path="/nightlife"
+          element={<Nightlife isAuthenticated={isAuthenticated} onLogout={handleLogout} />}
+        />
+        <Route
+          path="/order/:id"
+          element={isAuthenticated ? <OrderWrapper isAuthenticated={isAuthenticated} onLogout={handleLogout} /> : <Navigate to="/" />}
+        />
+        <Route path="/get-app" element={<BitescapeApp />} />
+        <Route
+          path="/add-restaurant"
+          element={
+            <>
+              <AddRestaurantNav />
+              <AddRestBanner />
+              <Partner />
+              <Success />
+              <FrequentQues />
+              <Footer />
+            </>
+          }
+        />
+        {/* These routes for modals are likely redundant if modals are rendered conditionally */}
+        {/* If you intend them as full pages, ensure they have their own Navbar and receive props */}
+        {/* <Route path="/login" element={<LoginModal />} /> */}
+        {/* <Route path="/signup" element={<SignupModal />} /> */}
+
+        <Route path="/google-auth-success" element={<GoogleAuthSuccessHandler onLoginSuccess={handleLoginSuccess} />} />
+        
+        <Route 
+          path="/complete-profile" 
+          element={isAuthenticated ? <CompleteProfile isAuthenticated={isAuthenticated} onLogout={handleLogout} /> : <Navigate to="/" />} 
+        />
+        <Route 
+          path="/order-success" 
+          element={isAuthenticated ? <OrderSuccess isAuthenticated={isAuthenticated} onLogout={handleLogout} /> : <Navigate to="/" />} 
+        />
+        <Route 
+          path="/track-order" 
+          element={isAuthenticated ? <TrackOrder isAuthenticated={isAuthenticated} onLogout={handleLogout} /> : <Navigate to="/" />} 
+        />
+      </Routes>
+
+      {/* Conditionally render Login and Signup Modals based on state */}
+      {showLoginModal && (
+        <LoginModal
+          show={showLoginModal}
+          handleClose={closeModals}
+          handleSignUp={openSignupModal} // Callback to switch to signup
+          onLoginSuccess={handleLoginSuccess} // Pass the success handler
+        />
+      )}
+      {showSignupModal && (
+        <SignupModal
+          show={showSignupModal}
+          handleClose={closeModals}
+          handleLogin={openLoginModal} // Callback to switch to login
+          onSignupSuccess={handleLoginSuccess} // Pass the success handler (signup is also a form of login)
+        />
+      )}
+    </>
   );
 }
 
-// App wrapped with Router
 function AppWrapper() {
   return (
     <Router>

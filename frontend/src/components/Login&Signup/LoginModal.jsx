@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Modal.css";
 
-const LoginModal = ({ show, handleClose, handleSignUp }) => {
+// Added onLoginSuccess prop
+const LoginModal = ({ show, handleClose, handleSignUp, onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  // This will now correctly be 'https://bitescape.onrender.com'
   const API_BASE_URL = import.meta.env.VITE_API_URL; 
 
   const isValidEmail = email.trim().length > 0 && email.includes("@");
@@ -38,10 +38,18 @@ const LoginModal = ({ show, handleClose, handleSignUp }) => {
         throw new Error(data.message || "Login failed");
       }
 
-      localStorage.setItem("token", data.token);
+      // Call the onLoginSuccess callback passed from App.jsx
+      if (onLoginSuccess) {
+        onLoginSuccess(data.token); // Pass the token up to App.jsx
+      }
+      
       console.log("Logged in successfully:", email);
-      handleClose();
+      handleClose(); // Close the modal
 
+      // The navigation logic is now handled by App.jsx's state update and route protection
+      // or by the component that renders this modal, after onLoginSuccess is called.
+      // However, for immediate navigation within the modal's context, you can keep this.
+      // If data.isProfileComplete is returned by backend on login, this is fine.
       if (data.isProfileComplete) {
         navigate("/homepage");
       } else {
@@ -57,7 +65,6 @@ const LoginModal = ({ show, handleClose, handleSignUp }) => {
   };
   
   const handleGoogleLogin = () => {
-    // This will now correctly point to 'https://bitescape.onrender.com/api/auth/google'
     window.location.href = `${API_BASE_URL}/api/auth/google`; 
   };
 

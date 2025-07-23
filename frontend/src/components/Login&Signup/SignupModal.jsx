@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Modal.css";
 
-const SignupModal = ({ show, handleClose, handleLogin }) => {
+// Added onSignupSuccess prop
+const SignupModal = ({ show, handleClose, handleLogin, onSignupSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -10,7 +11,7 @@ const SignupModal = ({ show, handleClose, handleLogin }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const API_BASE_URL = import.meta.env.VITE_API_URL; // ✅ Uses environment variable
+  const API_BASE_URL = import.meta.env.VITE_API_URL; 
 
   const isValidEmail = email.trim().length > 0 && email.includes("@");
   const isValidPassword = password.length >= 6;
@@ -18,7 +19,10 @@ const SignupModal = ({ show, handleClose, handleLogin }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isValidEmail || !isValidPassword || !passwordsMatch) return;
+    if (!isValidEmail || !isValidPassword || !passwordsMatch) {
+      setErrorMessage("Please enter a valid email, a password of at least 6 characters, and ensure passwords match.");
+      return;
+    }
 
     setIsSubmitting(true);
     setErrorMessage("");
@@ -32,28 +36,36 @@ const SignupModal = ({ show, handleClose, handleLogin }) => {
 
       const data = await response.json();
 
-      if (!response.ok) throw new Error(data.message || "Signup failed");
+      if (!response.ok) {
+        throw new Error(data.message || "Signup failed");
+      }
 
       console.log("Account created:", email);
-      localStorage.setItem("token", data.token);
-console.log("Account created:", email);
-setEmail("");
-setPassword("");
-setConfirmPassword("");
-handleClose();
+      // Call the onSignupSuccess callback passed from App.jsx
+      if (onSignupSuccess) {
+        onSignupSuccess(data.token); // Pass the token up to App.jsx
+      }
 
-// ✅ Conditional navigation
-if (data.isProfileComplete) {
-  navigate("/homepage");
-} else {
-  navigate("/complete-profile");
-}
-} catch (error) {
-  console.error("Error during signup:", error);
-  setErrorMessage(error.message || "An error occurred during signup.");
-} finally {
-  setIsSubmitting(false);
-  }
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      handleClose(); // Close the modal
+
+      // The navigation logic is now handled by App.jsx's state update and route protection
+      // or by the component that renders this modal, after onSignupSuccess is called.
+      // If data.isProfileComplete is returned by backend on signup, this is fine.
+      if (data.isProfileComplete) {
+        navigate("/homepage");
+      } else {
+        navigate("/complete-profile");
+      }
+
+    } catch (error) {
+      console.error("Error during signup:", error);
+      setErrorMessage(error.message || "An error occurred during signup.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!show) return null;
