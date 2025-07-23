@@ -1,54 +1,55 @@
-    import express from "express";
-    import { loginUser, registerUser } from "../controllers/authController.js";
-    import passport from "passport";
-    import jwt from "jsonwebtoken";
+import express from "express";
+import { loginUser, registerUser } from "../controllers/authController.js";
+import passport from "passport";
+import jwt from "jsonwebtoken";
 
-    const router = express.Router();
+const router = express.Router();
 
-    // Signup Route
-    router.post("/signup", registerUser);
+// Signup Route
+router.post("/signup", registerUser);
 
-    // Login Route
-    router.post("/login", loginUser);
+// Login Route
+router.post("/login", loginUser);
 
-    // ----------------------
-    // 🌐 Google OAuth Routes
-    // ----------------------
+// ----------------------
+// 🌐 Google OAuth Routes
+// ----------------------
 
-    // Start Google OAuth
-    router.get(
-      "/google",
-      passport.authenticate("google", { scope: ["profile", "email"] })
-    );
+// Start Google OAuth
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
-    // Google OAuth Callback
-    router.get(
-      "/google/callback",
-      passport.authenticate("google", {
-        session: false,
-        failureRedirect: "/auth/google/failure",
-      }),
-      (req, res) => {
-        const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
-          expiresIn: "1h",
-        });
-
-        const redirectPath = req.user.isProfileComplete ? "/homepage" : "/complete-profile";
-
-        // IMPORTANT CHANGE: Use the correct frontend URL for redirection after successful Google Auth
-        // If your frontend is deployed on Vercel, use its HTTPS URL here.
-        // If you are testing locally, use 'http://localhost:5173'.
-        // For Vercel, it would be:
-        // res.redirect(`https://ey-zomato-clone-lgud0mvbc-gaganv716s-projects.vercel.app/google-auth-success?token=${token}&redirect=${redirectPath}`);
-        // For local testing (assuming your Vercel URL is not yet fixed or you want to test locally):
-        res.redirect(`http://localhost:5173/google-auth-success?token=${token}&redirect=${redirectPath}`);
-      }
-    );
-
-    // Optional failure route
-    router.get("/google/failure", (req, res) => {
-      res.send("Google Login Failed");
+// Google OAuth Callback
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    session: false,
+    failureRedirect: "/auth/google/failure",
+  }),
+  (req, res) => {
+    const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
     });
 
-    export default router;
-    
+    const redirectPath = req.user.isProfileComplete ? "/homepage" : "/complete-profile";
+
+    // ✅ FIX: Use the FRONTEND_URL environment variable for redirection.
+    // This will correctly point to your Vercel frontend when deployed on Render.
+    // It will fall back to localhost for local backend testing if FRONTEND_URL is not set.
+    const frontendRedirectUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+    // Log the URL for debugging in Render logs
+    console.log(`Redirecting to frontend: ${frontendRedirectUrl}/google-auth-success?token=${token}&redirect=${redirectPath}`);
+
+    res.redirect(`${frontendRedirectUrl}/google-auth-success?token=${token}&redirect=${redirectPath}`);
+  }
+);
+
+// Optional failure route
+router.get("/google/failure", (req, res) => {
+  res.send("Google Login Failed");
+});
+
+export default router;
